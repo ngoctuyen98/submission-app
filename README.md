@@ -208,7 +208,7 @@ Kiểm tra console logs trong `CelebrationModal.jsx` để debug state.
 
 ## 🚀 Demo
 
-Ứng dụng đã được deploy tại: [Link Demo](https://submission-app-demo.vercel.app) _(coming soon)_
+Ứng dụng đã được deploy tại: [Link Demo](https://submission-app.vercel.app/) _(coming soon)_
 
 ## 🤝 Đóng góp
 

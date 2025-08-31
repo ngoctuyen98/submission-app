@@ -22,6 +22,8 @@ const ACTIONS = {
 
 // Reducer function
 function submissionReducer(state, action) {
+  console.log("Reducer action:", action.type, action.payload);
+
   switch (action.type) {
     case ACTIONS.SET_LOADING:
       return { ...state, loading: action.payload };
@@ -45,6 +47,7 @@ function submissionReducer(state, action) {
       return { ...state, error: null };
 
     case ACTIONS.SHOW_CELEBRATION:
+      console.log("Setting celebration state:", action.payload);
       return {
         ...state,
         showCelebration: true,
@@ -52,6 +55,7 @@ function submissionReducer(state, action) {
       };
 
     case ACTIONS.HIDE_CELEBRATION:
+      console.log("Hiding celebration");
       return {
         ...state,
         showCelebration: false,
@@ -121,19 +125,29 @@ export function SubmissionProvider({ children }) {
 
       // Show celebration based on score
       const celebrationType = getCelebrationType(submissionData.score);
-      dispatch({
-        type: ACTIONS.SHOW_CELEBRATION,
-        payload: {
-          type: celebrationType,
-          score: submissionData.score,
-          name: submissionData.name,
-        },
+      console.log("Triggering celebration:", {
+        type: celebrationType,
+        score: submissionData.score,
+        name: submissionData.name,
       });
+
+      // Delay to ensure state is settled before showing celebration
+      setTimeout(() => {
+        dispatch({
+          type: ACTIONS.SHOW_CELEBRATION,
+          payload: {
+            type: celebrationType,
+            score: submissionData.score,
+            name: submissionData.name,
+          },
+        });
+      }, 100);
 
       dispatch({ type: ACTIONS.SET_LOADING, payload: false });
       return newSubmission;
     } catch (error) {
       dispatch({ type: ACTIONS.SET_ERROR, payload: "Không thể nộp bài" });
+      dispatch({ type: ACTIONS.SET_LOADING, payload: false });
       throw error;
     }
   };
@@ -173,7 +187,7 @@ export function useSubmission() {
 function getCelebrationType(score) {
   if (score >= 90) return "excellent";
   if (score >= 80) return "good";
-  if (score >= 70) return "average";
+  if (score >= 60) return "average";
   return "needs_improvement";
 }
 
